@@ -52,6 +52,7 @@ function jadePart(jadefile) {
     var jadestr = fs.readFileSync(jadefile); 
 
     jade.render(jadestr, {filename: jadefile}, function(err,html) {
+      html = html.replace(/\n/g,'');
       var jsstr = leader(jadefile);
       jsstr += 'R.dom[\''+key+'\'] = \'' + html.replace(/\'/g,'\\\'') + '\';'
       process.stdout.write(jsstr);
