@@ -249,5 +249,40 @@ function jsonToSelect(obj) {
   }
 
   return $select;
+};
+
+R.enforce = function(obj) {
+  return {
+    enforced: obj
+  , hidden: false
+  , hide: function() {
+      this.hidden = true;
+      return this;
+    }
+  };
+};
+
+
+function cc2lcu(obj) {
+  obj = obj || this;
+
+  if(typeof obj == 'string') { 
+    return obj.replace(/([a-z])([A-Z])/g, function (a, l, u) {
+        return l+'_'+u.toLowerCase();
+    });
+  }
+  else {
+    for(var k in obj) {
+      if(obj.hasOwnProperty(k)) {
+        
+      }
+    }
+  }
 }
 
+
+function errorDialog(message) {
+  $('body').append(R.dom.error_dialog);
+}
+
+// R.extractEnforcedKey
