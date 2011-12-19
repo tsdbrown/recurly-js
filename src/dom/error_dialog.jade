@@ -1,0 +1,27 @@
+:stylus
+  #recurly_error_dialog
+    position fixed
+    z-index 9999
+    top 50%
+    left 50%
+    width 480px
+    height 320px
+    margin -160px 0 0 -240px
+    background yellow
+    color black
+    padding 20px
+    border 5px dashed red
+
+
+#recurly_error_dialog
+  #recurly_error_headline Recurly.js Error
+  #recurly_error_message.
+    It looks like you added 'account.first_name' to the signature,
+    but did not specify the cooresponding value in buildSubscribeForm. 
+  #recurly_error_enduser
+    #recurly_error_enduser_headline.
+      Just using this website?
+    #recurly_error_enduser_message
+      Sorry, but it looks like payments are broken.
+      Please tell the developers about this error so they can fix it.
+      

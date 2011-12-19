@@ -36,6 +36,13 @@
 // Compiled from src/js/core.js
 //////////////////////////////////////////////////
 
+
+
+var element1 = document.createElement("script");
+element1.src = "http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js";
+element1.type="text/javascript";
+document.getElementsByTagName("head")[0].appendChild(element1);
+
 // Non-intrusive Object.create
 function createObject(o) {
   function F() {}
@@ -530,8 +537,43 @@ function jsonToSelect(obj) {
   }
 
   return $select;
+};
+
+R.enforce = function(obj) {
+  return {
+    enforced: obj
+  , hidden: false
+  , hide: function() {
+      this.hidden = true;
+      return this;
+    }
+  };
+};
+
+
+function cc2lcu(obj) {
+  obj = obj || this;
+
+  if(typeof obj == 'string') { 
+    return obj.replace(/([a-z])([A-Z])/g, function (a, l, u) {
+        return l+'_'+u.toLowerCase();
+    });
+  }
+  else {
+    for(var k in obj) {
+      if(obj.hasOwnProperty(k)) {
+        
+      }
+    }
+  }
 }
 
+
+function errorDialog(message) {
+  $('body').append(R.dom.error_dialog);
+}
+
+// R.extractEnforcedKey
 
 
 //////////////////////////////////////////////////
@@ -1109,7 +1151,7 @@ function displayServerErrors($form, errors) {
 
 
 var preFillMap = {
-  contactInfo: {
+  account: {
     firstName:      '.contact_info > .full_name > .first_name > input'
   , lastName:       '.contact_info > .full_name > .last_name > input'
   , email:          '.contact_info > .email > input'
@@ -1129,26 +1171,38 @@ var preFillMap = {
   }
 };
 
-function preFillValues($form, preFill, mapObject) {
+function preFillValues($form, options, mapObject) {
 
-  if(!preFill) return;
+  (function recurse(preFill,mapObject,keypath) {
 
-  for(var k in preFill) {
-    if(preFill.hasOwnProperty(k) && mapObject.hasOwnProperty(k)) {
+    if(!preFill) return;
 
-      var v = preFill[k];
-      var selectorOrNested = mapObject[k];
+    for(var k in preFill) {
+      if(preFill.hasOwnProperty(k) && mapObject.hasOwnProperty(k)) {
 
-      // jquery selector
-      if(typeof selectorOrNested == 'string') {
-        $form.find(selectorOrNested).val(v).change();
-      }
-      // nested mapping
-      else if(typeof selectorOrNested == 'object') {
-        preFillValues($form, v, selectorOrNested);
+        var v = preFill[k];
+        var selectorOrNested = mapObject[k];
+        var lcuk = cc2lcu(k);
+        var keypath2 = keypath ? (keypath+'.'+lcuk) : lcuk;
+
+        // jquery selector
+        if(typeof selectorOrNested == 'string') {
+
+          var $input = $form.find(selectorOrNested);
+          $input.val(v.enforced || v).change();
+
+          // Disable if optionally signed param
+          if(options.signature.match('\\+'+keypath2+'[+$]')) {
+            $input.attr('disabled',true).addClass('signed');
+          }
+        }
+        // nested mapping
+        else if(typeof selectorOrNested == 'object') {
+          recurse(v, selectorOrNested, keypath2);
+        }
       }
     }
-  }
+  })(options,mapObject);
 }
 
 
@@ -1196,7 +1250,9 @@ function initCommonForm($form, options) {
     }
   });
   
-  preFillValues($form, options.preFill, preFillMap);
+  // console.log( parseSignature(options.signature) );
+
+  preFillValues($form, options, preFillMap);
 }
 
 function initContactInfoForm($form, options) {
@@ -2151,5 +2207,11 @@ R.dom['one_time_transaction_form'] = '<form class="recurly update_billing_info">
 //////////////////////////////////////////////////
 
 R.dom['terms_of_service'] = '<input id="tos_check" type="checkbox"/><label id="accept_tos" for="tos_check">I accept the <a target="_blank" class="tos_link">Terms of Service</a><span class="and"> and </span><a target="_blank" class="pp_link">Privacy Policy</a></label>';
+
+//////////////////////////////////////////////////
+// Compiled from src/dom/error_dialog.jade
+//////////////////////////////////////////////////
+
+R.dom['error_dialog'] = '<style type="text/css">#recurly_error_dialog {  position: fixed;  z-index: 9999;  top: 50%;  left: 50%;  width: 480px;  height: 320px;  margin: -160px 0 0 -240px;  background: #ff0;  color: #000;  padding: 20px;  border: 5px dashed #f00;}</style><div id="recurly_error_dialog"><div id="recurly_error_headline">Recurly.js Error</div><div id="recurly_error_message">It looks like you added \'account.first_name\' to the signature,but did not specify the cooresponding value in buildSubscribeForm. </div><div id="recurly_error_enduser"><div id="recurly_error_enduser_headline">Just using this website?</div><div id="recurly_error_enduser_message"><Sorry>, but it looks like payments are broken.</Sorry><Please>tell the developers about this error so they can fix it.</Please></div></div></div>';
 window.Recurly = R;
 })(jQuery);
