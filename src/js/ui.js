@@ -97,7 +97,7 @@ function displayServerErrors($form, errors) {
 
 
 var preFillMap = {
-  contactInfo: {
+  account: {
     firstName:      '.contact_info > .full_name > .first_name > input'
   , lastName:       '.contact_info > .full_name > .last_name > input'
   , email:          '.contact_info > .email > input'
@@ -117,26 +117,38 @@ var preFillMap = {
   }
 };
 
-function preFillValues($form, preFill, mapObject) {
+function preFillValues($form, options, mapObject) {
 
-  if(!preFill) return;
+  (function recurse(preFill,mapObject,keypath) {
 
-  for(var k in preFill) {
-    if(preFill.hasOwnProperty(k) && mapObject.hasOwnProperty(k)) {
+    if(!preFill) return;
 
-      var v = preFill[k];
-      var selectorOrNested = mapObject[k];
+    for(var k in preFill) {
+      if(preFill.hasOwnProperty(k) && mapObject.hasOwnProperty(k)) {
 
-      // jquery selector
-      if(typeof selectorOrNested == 'string') {
-        $form.find(selectorOrNested).val(v).change();
-      }
-      // nested mapping
-      else if(typeof selectorOrNested == 'object') {
-        preFillValues($form, v, selectorOrNested);
+        var v = preFill[k];
+        var selectorOrNested = mapObject[k];
+        var lcuk = cc2lcu(k);
+        var keypath2 = keypath ? (keypath+'.'+lcuk) : lcuk;
+
+        // jquery selector
+        if(typeof selectorOrNested == 'string') {
+
+          var $input = $form.find(selectorOrNested);
+          $input.val(v.enforced || v).change();
+
+          // Disable if optionally signed param
+          if(options.signature.match('\\+'+keypath2+'[+$]')) {
+            $input.attr('disabled',true).addClass('signed');
+          }
+        }
+        // nested mapping
+        else if(typeof selectorOrNested == 'object') {
+          recurse(v, selectorOrNested, keypath2);
+        }
       }
     }
-  }
+  })(options,mapObject);
 }
 
 
@@ -184,7 +196,9 @@ function initCommonForm($form, options) {
     }
   });
   
-  preFillValues($form, options.preFill, preFillMap);
+  // console.log( parseSignature(options.signature) );
+
+  preFillValues($form, options, preFillMap);
 }
 
 function initContactInfoForm($form, options) {
