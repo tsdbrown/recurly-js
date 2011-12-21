@@ -27,12 +27,10 @@ DOM_SOURCES = $(addprefix src/dom/, \
 	error_dialog.jade \
 )
 
-all: npm build build/recurly.min.js
+all: node_modules build build/recurly.min.js
 
 build:
 	mkdir -p build
-	# cp -rf src/examples build/examples
-	# cp -rf src/images build/images
 
 build/recurly.js: $(JS_SOURCES) $(DOM_SOURCES)
 	$(COMPILER) $^ > $@
@@ -51,4 +49,4 @@ node_modules: package.json
 	npm install
 	touch node_modules
 
-.PHONY: clean npm
+.PHONY: clean

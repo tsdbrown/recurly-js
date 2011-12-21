@@ -281,6 +281,12 @@ function cc2lcu(obj) {
 }
 
 
+R.ajax = function(options) {
+  options.data = $.extend({js_version: 2.0}, options.data);
+  return $.ajax(options);
+};
+
+
 function errorDialog(message) {
   $('body').append(R.dom.error_dialog);
 }
