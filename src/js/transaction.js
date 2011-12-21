@@ -15,7 +15,7 @@ R.Transaction = {
     , signature: options.signature
     };
 
-    $.ajax({
+    R.ajax({
       url: R.settings.baseURL+'transactions/create'
     , data: json
     , dataType: 'jsonp'

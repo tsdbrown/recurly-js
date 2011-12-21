@@ -114,6 +114,9 @@ var preFillMap = {
   , state:          '.billing_info > .address > .state_zip > .state > input'
   , zip:            '.billing_info > .address > .state_zip > .zip > input'
   , vatNumber:      '.billing_info > .vat_number > input'
+
+  , cardNumber:      '.billing_info  .card_number > input'
+  , CVV:      '.billing_info  .cvv > input'
   }
 };
 
@@ -477,7 +480,7 @@ function verifyTOSChecked($form) {
 }
 
 
-R.buildBillingInfoUpdateForm = function(options) {
+R.buildBillingInfoUpdateForm = R.buildBillingInfoForm = function(options) {
   var defaults = {
     addressRequirement: 'full'
   , distinguishContactFromBillingInfo: true 
