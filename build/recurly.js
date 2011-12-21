@@ -569,6 +569,12 @@ function cc2lcu(obj) {
 }
 
 
+R.ajax = function(options) {
+  options.data = $.extend({js_version: 2.0}, options.data);
+  return $.ajax(options);
+};
+
+
 function errorDialog(message) {
   $('body').append(R.dom.error_dialog);
 }
@@ -777,7 +783,7 @@ R.BillingInfo = {
       };
     }
 
-    $.ajax({
+    R.ajax({
       url: R.settings.baseURL+'accounts/'+options.accountCode+'/billing_info/update'
     , data: json
     , dataType: 'jsonp'
@@ -909,7 +915,7 @@ R.Subscription = {
     , billing_info: this.billingInfo.toJSON()
     };
 
-    $.ajax({
+    R.ajax({
       url: R.settings.baseURL+'subscribe',
       data: json,
       dataType: "jsonp",
@@ -976,7 +982,7 @@ R.Subscription.getCoupon = function(couponCode, successCallback, errorCallback) 
 
   if(!R.settings.baseURL) { R.raiseError('Company subdomain not configured'); }
 
-  return $.ajax({
+  return R.ajax({
     url: R.settings.baseURL+'plans/'+this.plan.code+'/coupons/'+couponCode,
     // data: params,
     dataType: "jsonp",
@@ -1021,7 +1027,7 @@ R.Transaction = {
     , signature: options.signature
     };
 
-    $.ajax({
+    R.ajax({
       url: R.settings.baseURL+'transactions/create'
     , data: json
     , dataType: 'jsonp'
@@ -1168,6 +1174,9 @@ var preFillMap = {
   , state:          '.billing_info > .address > .state_zip > .state > input'
   , zip:            '.billing_info > .address > .state_zip > .zip > input'
   , vatNumber:      '.billing_info > .vat_number > input'
+
+  , cardNumber:      '.billing_info  .card_number > input'
+  , CVV:      '.billing_info  .cvv > input'
   }
 };
 
@@ -1531,7 +1540,7 @@ function verifyTOSChecked($form) {
 }
 
 
-R.buildBillingInfoUpdateForm = function(options) {
+R.buildBillingInfoUpdateForm = R.buildBillingInfoForm = function(options) {
   var defaults = {
     addressRequirement: 'full'
   , distinguishContactFromBillingInfo: true 
