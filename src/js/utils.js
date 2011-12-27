@@ -268,8 +268,8 @@ function cc2lcu(obj) {
 
   if(typeof obj == 'string') { 
     return obj.replace(/([a-z])([A-Z])/g, function (a, l, u) {
-        return l+'_'+u.toLowerCase();
-    });
+        return l+'_'+u;
+    }).toLowerCase();
   }
   else {
     for(var k in obj) {

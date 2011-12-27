@@ -556,8 +556,8 @@ function cc2lcu(obj) {
 
   if(typeof obj == 'string') { 
     return obj.replace(/([a-z])([A-Z])/g, function (a, l, u) {
-        return l+'_'+u.toLowerCase();
-    });
+        return l+'_'+u;
+    }).toLowerCase();
   }
   else {
     for(var k in obj) {
@@ -1017,6 +1017,7 @@ R.Transaction = {
     return {
       currency: this.currency
     , amount_in_cents: this.cost.cents()
+    , description: this.description
     };
   }
 , create: createObject
@@ -1195,11 +1196,14 @@ function preFillValues($form, options, mapObject) {
         var lcuk = cc2lcu(k);
         var keypath2 = keypath ? (keypath+'.'+lcuk) : lcuk;
 
+
         // jquery selector
         if(typeof selectorOrNested == 'string') {
 
           var $input = $form.find(selectorOrNested);
-          $input.val(v.enforced || v).change();
+          $input.val(v).change();
+
+          console.log(keypath2);
 
           // Disable if optionally signed param
           if(options.signature.match('\\+'+keypath2+'[+$]')) {

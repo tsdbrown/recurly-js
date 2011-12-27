@@ -134,11 +134,14 @@ function preFillValues($form, options, mapObject) {
         var lcuk = cc2lcu(k);
         var keypath2 = keypath ? (keypath+'.'+lcuk) : lcuk;
 
+
         // jquery selector
         if(typeof selectorOrNested == 'string') {
 
           var $input = $form.find(selectorOrNested);
-          $input.val(v.enforced || v).change();
+          $input.val(v).change();
+
+          console.log(keypath2);
 
           // Disable if optionally signed param
           if(options.signature.match('\\+'+keypath2+'[+$]')) {

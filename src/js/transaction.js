@@ -4,6 +4,7 @@ R.Transaction = {
     return {
       currency: this.currency
     , amount_in_cents: this.cost.cents()
+    , description: this.description
     };
   }
 , create: createObject
