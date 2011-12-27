@@ -98,6 +98,7 @@ R.Subscription = {
       subscription: this.toJSON()
     , account: this.account.toJSON()
     , billing_info: this.billingInfo.toJSON()
+    , signature: options.signature
     };
 
     R.ajax({
