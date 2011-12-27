@@ -913,6 +913,7 @@ R.Subscription = {
       subscription: this.toJSON()
     , account: this.account.toJSON()
     , billing_info: this.billingInfo.toJSON()
+    , signature: options.signature
     };
 
     R.ajax({
@@ -2042,16 +2043,18 @@ R.buildSubscriptionForm = function(options) {
         $form.find('button.submit').attr('disabled', true).text('Please Wait');
 
         subscription.save({
-          success: function(response) {
-            if(options.afterSubscribe)
-              options.afterSubscribe(response);
 
-            if(options.successURL) {
-              var url = options.successURL;
-              // url = R.replaceVars(url, response);
-              R.post(url, response, options);
+        signature: options.signature
+        ,   success: function(response) {
+              if(options.afterSubscribe)
+                options.afterSubscribe(response);
+
+              if(options.successURL) {
+                var url = options.successURL;
+                // url = R.replaceVars(url, response);
+                R.post(url, response, options);
+              }
             }
-          }
         , error: function(errors) {
             if(!options.onError || !options.onError(errors)) {
               displayServerErrors($form, errors);
