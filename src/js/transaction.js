@@ -5,6 +5,7 @@ R.Transaction = {
       currency: this.currency
     , amount_in_cents: this.cost.cents()
     , description: this.description
+    , accounting_code: this.accountingCode
     };
   }
 , create: createObject
