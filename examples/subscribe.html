@@ -13,12 +13,12 @@
     subdomain: 'recurlyjsdemo-test'
   , currency: 'USD'
   , country: 'US'
-  , baseURL: 'http://api.lvh.me:3000/jsonp/emeryco/'
+  , baseURL: 'http://api.dev.recurly.com/jsonp/emery-test/'
   });
 
   Recurly.buildSubscriptionForm({
     target: '#recurly-subscribe'
-  , planCode: 'simpleplan'
+  , planCode: 'test'
   , successURL: 'confirmation.html'
   , distinguishContactFromBillingInfo: true
   , collectCompany: true
@@ -43,7 +43,7 @@
     , CVV: '123'
     }
 
-    ,signature: '8aa72a28497142c90b4251a2a614e48c5f0d5cb7-0+account.first_name'
+    ,signature: '60748ae02875e81682d6b5550bb3845c5a29b393-1325038308+account.first_name'
     /* , signature: <%= sign_subscription(user.email,plan_code,firstName, {}) %>' */ 
 
 

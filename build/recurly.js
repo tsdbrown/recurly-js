@@ -1018,6 +1018,7 @@ R.Transaction = {
       currency: this.currency
     , amount_in_cents: this.cost.cents()
     , description: this.description
+    , accounting_code: this.accountingCode
     };
   }
 , create: createObject
@@ -1683,6 +1684,8 @@ R.buildTransactionForm = function(options) {
   transaction.account = account;
   transaction.billingInfo = billingInfo;
   transaction.currency = options.currency;
+  transaction.description = options.description;
+  transaction.accountingCode = options.accountingCode;
   transaction.cost = new R.Cost(options.amountInCents);
 
   var $form = $(R.dom.one_time_transaction_form);
