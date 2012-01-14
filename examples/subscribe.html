@@ -13,16 +13,16 @@
     subdomain: 'recurlyjsdemo-test'
   , currency: 'USD'
   , country: 'US'
-  , baseURL: 'http://api.dev.recurly.com/jsonp/emery-test/'
+  // , baseURL: 'http://api.dev.recurly.com/jsonp/emery-test/'
   });
 
   Recurly.buildSubscriptionForm({
     target: '#recurly-subscribe'
-  , planCode: 'test'
+  , planCode: 'simpleplan'
   , successURL: 'confirmation.html'
   , distinguishContactFromBillingInfo: true
   , collectCompany: true
-  /* , termsOfServiceURL: 'http://example.com/tos' */
+  , termsOfServiceURL: 'http://example.com/tos'
   , account: {
       firstName: 'Joe'
     , lastName: 'User'
@@ -32,9 +32,9 @@
     }
   , billingInfo: {
       firstName: 'Joe'
-    , lastName: 'User'
-    , address1: '123 somestreet'
-    , address2: '45'
+    // , lastName: 'User'
+    // , address1: '123 somestreet'
+    // , address2: '45'
     , city: 'San Francisco'
     , zip: '94107'
     , state: 'CA'

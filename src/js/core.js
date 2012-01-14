@@ -16,6 +16,7 @@ var R = {};
 R.settings = {
   enableGeoIP: true
 , acceptedCards: ['american_express', 'discover', 'mastercard', 'visa']
+, oneErrorPerField: true
 };
 
 R.dom = {};
