@@ -746,6 +746,8 @@ R.buildSubscriptionForm = function(options) {
 
   options = $.extend(createObject(R.settings), defaults, options);
 
+  if(!options.signature) R.raiseError('signature missing');
+
   var $form = $(R.dom.subscribe_form);
   $form.find('.contact_info').html(R.dom.contact_info_fields);
   $form.find('.billing_info').html(R.dom.billing_info_fields);
