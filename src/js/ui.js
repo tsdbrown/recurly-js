@@ -774,6 +774,9 @@ R.buildSubscriptionForm = function(options) {
 
     subscription.account = account;
     subscription.billingInfo = billingInfo;
+    if(options.additionalParams && options.additionalParams.subscription) {
+       subscription.additionalParams = options.additionalParams.subscription;
+    }
 
     if(options.filterSubscription)
       subscription = options.filterSubscription(subscription) || subscription; 

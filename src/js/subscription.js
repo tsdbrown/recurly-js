@@ -3,6 +3,7 @@ R.Subscription = {
   create: createObject
 , plan: R.Plan
 , addOns: []
+, additionalParams: {}
 
 , calculateTotals: function() {
     var totals = {
@@ -89,6 +90,14 @@ R.Subscription = {
       , quantity: b[i].quantity
       });
     }
+
+    // Do not allow additionalParams to overwrite existing parameters
+    for(var k in this.additionalParams) {
+        if(this.additionalParams.hasOwnProperty(k) && (k in json)) {
+            delete this.additionalParams[k];
+        }
+    }
+    $.extend(json, this.additionalParams);
 
     return json;
   }
